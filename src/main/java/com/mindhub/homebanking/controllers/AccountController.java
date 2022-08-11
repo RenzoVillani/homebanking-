@@ -16,12 +16,12 @@ public class AccountController {
     @Autowired
     private com.mindhub.homebanking.repositories.AccountRepository AccountRepository;
 
-    @RequestMapping("/Accounts")
+    @RequestMapping("/accounts")
     public List<AccountDTO> getAccount(){
         return this.AccountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(Collectors.toList());
     }
 
-    @RequestMapping("/Accounts/{id}")
+    @RequestMapping("/accounts/{id}")
     public AccountDTO getAccount(@PathVariable Long id){
         System.out.println(id);
         return AccountRepository.findById(id).map(AccountDTO::new).orElse(null);
