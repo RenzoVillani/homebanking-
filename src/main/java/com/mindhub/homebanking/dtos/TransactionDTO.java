@@ -58,4 +58,8 @@ public class TransactionDTO {
     public void setDate(LocalDateTime date) {
         this.date = date;
     }
+
+    public double getAmount() {
+        return amount;
+    }
 }
