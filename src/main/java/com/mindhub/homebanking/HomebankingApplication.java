@@ -18,7 +18,8 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository, LoanRepository loanRepository, ClientLoanRepository clientLoanRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository,
+									  LoanRepository loanRepository, ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
 		return (args)->
 		{
 			Client client1 = new Client("Renzo", "Villani", "renzo@gmail.com");
@@ -77,6 +78,12 @@ public class HomebankingApplication {
 			clientLoanRepository.save(clientLoan2);
 			clientLoanRepository.save(clientLoan3);
 			clientLoanRepository.save(clientLoan4);
+
+			Card card1 = new Card(CardType.DEBIT , CardColor.GOLD, "3241-4214-5364-3253", 321, LocalDateTime.now(), LocalDateTime.now().plusYears(5), client1);
+			Card card2 = new Card(CardType.CREDIT , CardColor.TITANIUM, "1412-8968-6636-2435", 367, LocalDateTime.now(), LocalDateTime.now().plusYears(5), client1);
+
+			cardRepository.save(card1);
+			cardRepository.save(card2);
 		};
 	}
 }
