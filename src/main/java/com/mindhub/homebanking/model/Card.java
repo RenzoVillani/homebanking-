@@ -26,13 +26,13 @@ public class Card {
     public Card() {
     }
 
-    public Card(CardType type, CardColor color, String number, int cvv, LocalDateTime thruDate, LocalDateTime fromDate, Client client) {
+    public Card(CardType type, CardColor color, String number, int cvv,  LocalDateTime fromDate,LocalDateTime thruDate, Client client) {
         this.type = type;
         this.color = color;
         this.number = number;
         this.cvv = cvv;
-        this.thruDate = thruDate;
         this.fromDate = fromDate;
+        this.thruDate = thruDate;
         this.cardholder = client.getFirstName() + " " + client.getLastName();
         this.client = client;
     }
