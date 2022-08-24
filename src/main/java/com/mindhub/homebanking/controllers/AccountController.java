@@ -51,10 +51,10 @@ public class AccountController {
     }
 
     public String generateAccountNumber(){
-        String number = "VIN" + ((int) ((Math.random() * (999 - 0)) + 0));
+        String number = "VIN " + ((int) ((Math.random() * (99999999 - 0)) + 0));
 
         while(accountRepository.findByNumber(number) != null){
-            number = "VIN" + ((int) ((Math.random() * (999 - 0)) + 0));
+            number = "VIN " + ((int) ((Math.random() * (99999999 - 0)) + 0));
         }
         return number;
     }
