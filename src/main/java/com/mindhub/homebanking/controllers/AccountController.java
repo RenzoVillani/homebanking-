@@ -32,8 +32,14 @@ public class AccountController {
     }
 
     @RequestMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id){
-        System.out.println(id);
+    public AccountDTO getAccount(@PathVariable Long id, Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        Account account = accountRepository.findById(id).orElse(null);
+
+        if (!client.getAccounts().contains(account)){
+            return null;
+        }
+
         return accountRepository.findById(id).map(AccountDTO::new).orElse(null);
     }
 
@@ -57,5 +63,11 @@ public class AccountController {
             number = "VIN " + ((int) ((Math.random() * (99999999 - 0)) + 0));
         }
         return number;
+    }
+
+    @RequestMapping(path = "/clients/current/accounts", method = RequestMethod.GET)
+    public List<AccountDTO> getAccounts(Authentication authentication){
+        Client client = this.clientRepository.findByEmail(authentication.getName());
+        return client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
     }
 }

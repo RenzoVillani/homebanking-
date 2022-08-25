@@ -16,7 +16,7 @@ public class Transaction {
 
     private double amount;
 
-    private String desciption;
+    private String description;
 
     private LocalDateTime date;
 
@@ -27,10 +27,10 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(TransactionType type, double amount, String desciption, LocalDateTime date, Account account) {
+    public Transaction(TransactionType type, double amount, String description, LocalDateTime date, Account account) {
         this.type = type;
         this.amount = amount;
-        this.desciption = desciption;
+        this.description = description;
         this.date = date;
         this.account = account;
     }
@@ -59,12 +59,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getDesciption() {
-        return desciption;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDesciption(String desciption) {
-        this.desciption = desciption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getDate() {
