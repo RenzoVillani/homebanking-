@@ -21,7 +21,7 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/web/index.html","/web/css/**","/web/img/**","/web/js/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/api/clients").permitAll()
-                .antMatchers("/web/**", "/api/clients/current/**", "/api/clients","/api/accounts/**").hasAuthority("CLIENT")
+                .antMatchers("/web/**", "/api/clients/current/**", "/api/clients","/api/accounts/**", "/api/transactions", "/api/loans").hasAuthority("CLIENT")
                 .antMatchers("/rest/**", "/h2-console/**", "/**").hasAuthority("ADMIN");
 
         http.formLogin()
@@ -32,6 +32,8 @@ public class WebAuthorization extends WebSecurityConfigurerAdapter {
         http.logout().logoutUrl("/api/logout");
 
         http.csrf().disable();
+
+        http.sessionManagement().invalidSessionUrl("/web/index.html");
 
         // if user is not authenticated, just send an authentication failure response
         http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));

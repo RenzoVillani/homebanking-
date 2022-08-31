@@ -34,7 +34,7 @@ public class HomebankingApplication {
 			Account account1 = new Account("VIN 112", LocalDateTime.now(), 34235.33);
 			Account account2 = new Account("VIN 115", LocalDateTime.now().plusDays(1), 34565.33);
 			Account account3 = new Account("VIN 120", LocalDateTime.now().plusDays(3), 20000);
-			Account account4 = new Account("VIN 112", LocalDateTime.now(), 42000.30);
+			Account account4 = new Account("VIN 117", LocalDateTime.now(), 42000.30);
 
 			client1.addAccount(account1);
 			client1.addAccount(account2);

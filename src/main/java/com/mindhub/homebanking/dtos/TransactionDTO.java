@@ -22,7 +22,7 @@ public class TransactionDTO {
     public TransactionDTO(Transaction transaction) {
         this.id = transaction.getId();
         this.type = transaction.getType();
-        this.description = transaction.getDesciption();
+        this.description = transaction.getDescription();
         this.date = transaction.getDate();
         this.amount = transaction.getAmount();
     }
