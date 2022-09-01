@@ -69,6 +69,9 @@ public class LoanController {
         if (!client.getAccounts().contains(account)){
             return new ResponseEntity<>("The destination account don't belong to this client", HttpStatus.FORBIDDEN);
         }
+        if (account.isActive() == false){
+            return new ResponseEntity<>("Your account isn't enabled", HttpStatus.FORBIDDEN);
+        }
 
         clientLoanRepository.save(new ClientLoan(amount * 1.2, payments, client, loan));
         transactionRepository.save(new Transaction(TransactionType.CREDIT, amount, loan.getName() + " loan approved", LocalDateTime.now(), account));

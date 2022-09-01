@@ -65,8 +65,12 @@ public class TransactionController {
             return new ResponseEntity<>("There isn't enough money to do the transaction", HttpStatus.FORBIDDEN);
         }
 
-        transactionRepository.save(new Transaction(TransactionType.DEBIT, -amount, fromAccountNumber + " " + description, LocalDateTime.now(), fromAccount));
-        transactionRepository.save(new Transaction(TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now(), toAccount));
+        if (fromAccount.isActive() == false || toAccount.isActive() == false){
+            return new ResponseEntity<>("One of the accounts isn't enabled", HttpStatus.FORBIDDEN);
+        }
+
+        transactionRepository.save(new Transaction(TransactionType.DEBIT, -amount, fromAccountNumber + " " + description, LocalDateTime.now(), fromAccount, fromAccount.getBalance() - amount));
+        transactionRepository.save(new Transaction(TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now(), toAccount,  toAccount.getBalance() + amount));
 
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         toAccount.setBalance(toAccount.getBalance() + amount);

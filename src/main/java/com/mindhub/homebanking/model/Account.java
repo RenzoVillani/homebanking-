@@ -22,6 +22,8 @@ public class Account {
     private LocalDateTime creationDate;
     private double balance;
 
+    private boolean active;
+
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private Set<Transaction> transactions = new HashSet<>();
 
@@ -33,6 +35,7 @@ public class Account {
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
+        this.active = true;
     }
 
     public long getId() {
@@ -77,5 +80,13 @@ public class Account {
 
     public void setTransactions(Set<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

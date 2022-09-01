@@ -2,6 +2,7 @@ package com.mindhub.homebanking.controllers;
 
 import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.model.Account;
+import com.mindhub.homebanking.model.Card;
 import com.mindhub.homebanking.model.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,5 +67,24 @@ public class AccountController {
     public List<AccountDTO> getAccounts(Authentication authentication){
         Client client = this.clientRepository.findByEmail(authentication.getName());
         return client.getAccounts().stream().map(AccountDTO::new).collect(Collectors.toList());
+    }
+
+    @PutMapping("/clients/current/accounts")
+    public ResponseEntity<Object> disabelAccount(String number, Authentication authentication){
+        Account account = this.accountRepository.findByNumber(number);
+        Client client = this.clientRepository.findByEmail(authentication.getName());
+
+        if (accountRepository.findByNumber(number) == null){
+            return new ResponseEntity<>("This account don't exist", HttpStatus.FORBIDDEN);
+        }
+        if (!client.getAccounts().contains(account)){
+            return new ResponseEntity<>("This account isn't yours", HttpStatus.FORBIDDEN);
+        }
+        if (account.getBalance() <=0){
+            return new ResponseEntity<>("You can't disable an account with money", HttpStatus.FORBIDDEN);
+        }
+        account.setActive(false);
+        accountRepository.save(account);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -18,6 +18,8 @@ public class AccountDTO {
 
     private Set<TransactionDTO> transactions;
 
+    private boolean active;
+
     public AccountDTO() {
     }
 
@@ -27,6 +29,7 @@ public class AccountDTO {
         this.creationDate = account.getCreationDate();
         this.balance = account.getBalance();
         this.transactions = account.getTransactions().stream().map(TransactionDTO::new).collect(Collectors.toSet());
+        this.active = account.isActive();
     }
 
 
@@ -64,5 +67,13 @@ public class AccountDTO {
 
     public void setTransactions(Set<TransactionDTO> transactions) {
         this.transactions = transactions;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
