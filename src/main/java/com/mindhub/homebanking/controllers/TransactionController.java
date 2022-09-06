@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.TransactionDTO;
 import com.mindhub.homebanking.model.Account;
 import com.mindhub.homebanking.model.Client;
 import com.mindhub.homebanking.model.Transaction;
@@ -12,12 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -33,7 +33,7 @@ public class TransactionController {
     private TransactionRepository transactionRepository;
 
     @Transactional
-    @RequestMapping(path = "/transactions", method = RequestMethod.POST)
+    @PostMapping("/transactions")
     public ResponseEntity<Object> createTransaction(@RequestParam double amount,
                                                     @RequestParam String description,
                                                     @RequestParam String fromAccountNumber,
@@ -68,8 +68,12 @@ public class TransactionController {
             return new ResponseEntity<>("There isn't enough money to do the transaction", HttpStatus.FORBIDDEN);
         }
 
-        transactionRepository.save(new Transaction(TransactionType.DEBIT, -amount, fromAccountNumber + " " + description, LocalDateTime.now(), fromAccount));
-        transactionRepository.save(new Transaction(TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now(), toAccount));
+        if (fromAccount.isActive() == false || toAccount.isActive() == false){
+            return new ResponseEntity<>("One of the accounts isn't enabled", HttpStatus.FORBIDDEN);
+        }
+
+        transactionRepository.save(new Transaction(TransactionType.DEBIT, -amount, fromAccountNumber + " " + description, LocalDateTime.now(), fromAccount, fromAccount.getBalance() - amount));
+        transactionRepository.save(new Transaction(TransactionType.CREDIT, amount, toAccountNumber + " " + description, LocalDateTime.now(), toAccount,  toAccount.getBalance() + amount));
 
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         toAccount.setBalance(toAccount.getBalance() + amount);
@@ -77,5 +81,25 @@ public class TransactionController {
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/transactions/get")
+        public ResponseEntity<Object> createTransaction(@RequestParam String since,
+        @RequestParam String until,
+        @RequestParam String number,
+        Authentication authentication){
+
+        LocalDateTime sinceDate = LocalDateTime.parse(since);
+        LocalDateTime untilDate = LocalDateTime.parse(until);
+        Client client = this.clientRepository.findByEmail(authentication.getName());
+        Account account = this.accountRepository.findByNumber(number);
+        if(since.isEmpty() || until.isEmpty() || number.isEmpty()){
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if(!client.getAccounts().contains(account)){
+            return new ResponseEntity<>("The selected account isn't yours", HttpStatus.FORBIDDEN);
+        }
+        Set<TransactionDTO> transactions = transactionRepository.findByDateBetween(sinceDate, untilDate).stream().filter(transaction -> transaction.getAccount().equals(account)).map(TransactionDTO::new).collect(Collectors.toSet());
+        return new ResponseEntity<>(transactions, HttpStatus.OK);
     }
 }

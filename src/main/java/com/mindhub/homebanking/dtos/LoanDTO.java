@@ -17,6 +17,8 @@ public class LoanDTO {
 
     private Set<ClientLoanDTO> loans = new HashSet<>();
 
+    private double percentage;
+
     public LoanDTO() {
     }
 
@@ -26,6 +28,7 @@ public class LoanDTO {
         this.maxAmount = loan.getMaxAmount();
         this.payments = loan.getPayments();
         this.loans = loan.getClientLoans().stream().map(clientLoan -> new ClientLoanDTO(clientLoan)).collect(Collectors.toSet());
+        this.percentage = loan.getPercentage();
     }
 
 
@@ -47,5 +50,9 @@ public class LoanDTO {
 
     public Set<ClientLoanDTO> getLoans() {
         return loans;
+    }
+
+    public double getPercentage() {
+        return percentage;
     }
 }
