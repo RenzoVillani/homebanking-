@@ -30,6 +30,7 @@ public class HomebankingApplication {
 		{
 			Client client1 = new Client("Renzo", "Villani", "renzo@gmail.com", passwordEncoder.encode("1234"));
 			Client client2 = new Client("Berbi", "Villani", "berbi@gmail.com", passwordEncoder.encode("0000"));
+			Client client3 = new Client("Renzo", "Villani", "renzo@admin.com", passwordEncoder.encode("1234"));
 
 			Account account1 = new Account("VIN 112", LocalDateTime.now(), 34235.33);
 			Account account2 = new Account("VIN 115", LocalDateTime.now().plusDays(1), 34565.33);
@@ -43,6 +44,7 @@ public class HomebankingApplication {
 
 			clientRepository.save(client1);
 			clientRepository.save(client2);
+			clientRepository.save(client3);
 			accountRepository.save (account1);
 			accountRepository.save (account2);
 			accountRepository.save (account3);
@@ -67,9 +69,9 @@ public class HomebankingApplication {
 			transactionRepository.save(transaction7);
 			transactionRepository.save(transaction8);
 
-			Loan loan1 = new Loan("Hipotecario", 500000, List.of(12,24,36,48,60));
-			Loan loan2 = new Loan("Personal", 100000, List.of(6,12,24));
-			Loan loan3 = new Loan("Automotriz", 300000, List.of(6,12,24,36));
+			Loan loan1 = new Loan("Hipotecario", 500000, List.of(12,24,36,48,60), 20);
+			Loan loan2 = new Loan("Personal", 100000, List.of(6,12,24), 50);
+			Loan loan3 = new Loan("Automotriz", 300000, List.of(6,12,24,36), 10);
 
 			loanRepository.save(loan1);
 			loanRepository.save(loan2);

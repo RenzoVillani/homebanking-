@@ -2,6 +2,8 @@ package com.mindhub.homebanking;
 
 import com.mindhub.homebanking.model.*;
 import com.mindhub.homebanking.repositories.*;
+import com.mindhub.homebanking.utils.AccountUtils;
+import com.mindhub.homebanking.utils.CardUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -95,5 +97,23 @@ public class RepositoriesTest {
     public void  doNotExistTransactionWithOutDescription(){
         List<Transaction> transactions = transactionRepository.findAll();
         assertThat(transactions, everyItem(hasProperty("description",not(empty()))));
+    }
+
+    @Test
+    public void generateCardNumberWorks(){
+        String cardNumberTested = CardUtils.generateCardNumber(cardRepository);
+        assertThat(cardNumberTested,not(emptyOrNullString()));
+    }
+
+    @Test
+    public void generateCvvNumberWorks(){
+        String cvvNumberTested = CardUtils.generateCardNumber(cardRepository);
+        assertThat(cvvNumberTested,not(emptyOrNullString()));
+    }
+
+    @Test
+    public void generateCvvAccountWorks(){
+        String accountNumberTested = AccountUtils.generateAccountNumber(accountRepository);
+        assertThat(accountNumberTested,not(emptyOrNullString()));
     }
 }

@@ -47,6 +47,7 @@ public class LoanController {
         Account account = accountRepository.findByNumber(loanApplicationDTO.getToAccountNumber());
         Loan loan = loanRepository.findById(loanApplicationDTO.getLoanId()).orElse(null);
 
+        double persentage = loan.getPercentage();
         double amount = loanApplicationDTO.getAmount();
         int payments = loanApplicationDTO.getPayments();
         String accountToNumber = loanApplicationDTO.getToAccountNumber();
@@ -73,11 +74,19 @@ public class LoanController {
             return new ResponseEntity<>("Your account isn't enabled", HttpStatus.FORBIDDEN);
         }
 
-        clientLoanRepository.save(new ClientLoan(amount * 1.2, payments, client, loan));
+        clientLoanRepository.save(new ClientLoan(amount * (1 + persentage/100), payments, client, loan));
         transactionRepository.save(new Transaction(TransactionType.CREDIT, amount, loan.getName() + " loan approved", LocalDateTime.now(), account));
 
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @PostMapping("/loans/create")
+    public ResponseEntity<Object> addLoan(@RequestParam String name, @RequestParam double maxAmount, @RequestParam List<Integer> payments, @RequestParam double percentage){
+        if (name.isEmpty() || maxAmount <= 0  || payments.isEmpty() || percentage <= 0){
+            return new ResponseEntity<>("Invalid data", HttpStatus.FORBIDDEN);
+        }
+        loanRepository.save(new Loan(name, maxAmount, payments, percentage));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -4,6 +4,7 @@ var app = new Vue({
         clientInfo: {},
         errorToats: null,
         errorMsg: null,
+        clientAccounts:[]
     },
     methods:{
         getData: function(){
@@ -11,6 +12,15 @@ var app = new Vue({
             .then((response) => {
                 //get client ifo
                 this.clientInfo = response.data;
+
+
+
+            }).then(()=>{
+             axios.get("/api/clients/current/accounts")
+              .then((response)=>{
+
+              this.clientAccounts =response.data
+              })
             })
             .catch((error)=>{
                 // handle error
@@ -31,7 +41,8 @@ var app = new Vue({
         },
         create: function(){
             axios.post('http://localhost:8080/api/clients/current/accounts')
-            .then(response => window.location.reload())
+            .then(response =>
+            window.location.reload())
             .catch((error) =>{
                 this.errorMsg = error.response.data;  
                 this.errorToats.show();
