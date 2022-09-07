@@ -32,10 +32,10 @@ public class HomebankingApplication {
 			Client client2 = new Client("Berbi", "Villani", "berbi@gmail.com", passwordEncoder.encode("0000"));
 			Client client3 = new Client("Renzo", "Villani", "renzo@admin.com", passwordEncoder.encode("1234"));
 
-			Account account1 = new Account("VIN 112", LocalDateTime.now(), 34235.33);
-			Account account2 = new Account("VIN 115", LocalDateTime.now().plusDays(1), 34565.33);
+			Account account1 = new Account("VIN 112", LocalDateTime.now(), 34235);
+			Account account2 = new Account("VIN 115", LocalDateTime.now().plusDays(1), 34565);
 			Account account3 = new Account("VIN 120", LocalDateTime.now().plusDays(3), 20000);
-			Account account4 = new Account("VIN 117", LocalDateTime.now(), 42000.30);
+			Account account4 = new Account("VIN 117", LocalDateTime.now(), 42000);
 
 			client1.addAccount(account1);
 			client1.addAccount(account2);
