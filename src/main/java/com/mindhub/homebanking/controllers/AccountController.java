@@ -93,7 +93,7 @@ public class AccountController {
         if (!client.getAccounts().contains(account)){
             return new ResponseEntity<>("This account isn't yours", HttpStatus.FORBIDDEN);
         }
-        if (account.getBalance() <0){
+        if (account.getBalance() > 0){
             return new ResponseEntity<>("You can't disable an account with money", HttpStatus.FORBIDDEN);
         }
         account.setActive(false);
